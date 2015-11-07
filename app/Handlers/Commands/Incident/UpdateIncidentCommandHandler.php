@@ -48,7 +48,7 @@ class UpdateIncidentCommandHandler
     public function handle(UpdateIncidentCommand $command)
     {
         $incident = $command->incident;
-        $incident->update($this->filterIncidentData($command));
+        $incident->update($this->filter($command));
 
         // The incident occurred at a different time.
         if ($command->incident_date) {
@@ -79,7 +79,7 @@ class UpdateIncidentCommandHandler
      *
      * @return array
      */
-    protected function filterIncidentData($command)
+    protected function filter(UpdateIncidentCommand $command)
     {
         return array_filter([
             'name'             => $command->name,
@@ -89,6 +89,6 @@ class UpdateIncidentCommandHandler
             'component_id'     => $command->component_id,
             'component_status' => $command->component_status,
             'notify'           => $command->notify,
-        ]);
+        ], 'is_null');
     }
 }
